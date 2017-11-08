@@ -26,7 +26,7 @@ class SalaryTypeController extends Controller
   // }
 
   public function list(){
-    $salaries=SalaryType::select('name', 'active')->get();
+    $salaries=SalaryType::select('id', 'name', 'active')->get();
     return response()->json($salaries);
   }
 

@@ -36,7 +36,7 @@ class TaxDetailController extends Controller
     if (is_null($tax)) {
       return response()->json(['msj' => "Tax not found"], 404);
     }else{
-      $taxdetail=TaxDetail::select('value')->where('taxe_id', $id)->get();
+      $taxdetail=TaxDetail::select('id', 'value')->where('taxe_id', $id)->get();
       return response()->json($taxdetail, 200);
     }
   }

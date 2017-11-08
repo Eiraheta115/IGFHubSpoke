@@ -25,7 +25,7 @@ class GroupController extends Controller
   }
 
   public function list(){
-    $groups=Group::select('name')->get();
+    $groups=Group::select('id', 'name')->get();
     return response()->json($groups);
   }
 

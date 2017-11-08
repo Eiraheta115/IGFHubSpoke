@@ -29,7 +29,7 @@ class UserControl extends Controller{
   }
 
   public function list(){
-    $users=User::select('fullname', 'email')->get();
+    $users=User::select('id','fullname', 'email')->get();
     return response()->json($users);
   }
 

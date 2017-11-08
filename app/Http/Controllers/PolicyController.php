@@ -27,7 +27,7 @@ class PolicyController extends Controller
   }
 
   public function list(){
-    $policy=Policy::select('name', 'code')->get();
+    $policy=Policy::select('id','name', 'code')->get();
     return response()->json($policy);
   }
 

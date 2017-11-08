@@ -61,3 +61,16 @@ Route::get('/salaries/', 'SalaryTypeController@list');
 Route::put('/salaries/{id}', 'SalaryTypeController@update');
 Route::put('/salaries/{id}/state', 'SalaryTypeController@updateState');
 Route::delete('/salaries/{id}', 'SalaryTypeController@delete');
+//CivilStatus
+Route::post('civilstatuses', 'CivilStatusController@create');
+//Route::get('/civilstatuses/{id}', 'CivilStatusController@show');
+Route::get('/civilstatuses/', 'CivilStatusController@list');
+Route::put('/civilstatuses/{id}', 'CivilStatusController@update');
+Route::delete('/civilstatuses/{id}', 'CivilStatusController@delete');
+//Job
+//CivilStatus
+Route::post('jobs', 'JobController@create');
+//Route::get('/civilstatuses/{id}', 'CivilStatusController@show');
+Route::get('/jobs/', 'JobController@list');
+Route::put('/jobs/{id}', 'JobController@update');
+Route::delete('/jobs/{id}', 'JobController@delete');
