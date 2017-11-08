@@ -10,4 +10,10 @@ class Candidate extends Model
   {
    return $this->belongsToMany('App\Evaluation', 'Candidate__evaluations');
   }
+
+  public function People()
+  {
+    return $this->morphOne('App\People', 'peopleable');
+  }
+
 }

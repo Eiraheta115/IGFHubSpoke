@@ -74,3 +74,7 @@ Route::post('jobs', 'JobController@create');
 Route::get('/jobs/', 'JobController@list');
 Route::put('/jobs/{id}', 'JobController@update');
 Route::delete('/jobs/{id}', 'JobController@delete');
+//Candidate
+Route::post('candidates', 'CandidateController@create');
+Route::get('/candidates/', 'CandidateController@list');
+Route::put('/candidates/{id}', 'CandidateController@updateState');

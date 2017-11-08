@@ -21,4 +21,8 @@ class Employee extends Model
     return $this->hasOne('App\User');
   }
 
+  public function People()
+  {
+    return $this->morphOne('App\People', 'peopleable');
+  }
 }
