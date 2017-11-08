@@ -15,10 +15,10 @@ class CreateRentsTable extends Migration
     {
         Schema::create('rents', function (Blueprint $table) {
             $table->increments('id');
-            $table->decimal('since', 5, 2);
-            $table->decimal('until', 5, 2);
-            $table->decimal('value', 5, 3);
-            $table->decimal('fee', 5, 2);
+            $table->decimal('since', 6, 2);
+            $table->decimal('until', 6, 2);
+            $table->decimal('value', 6, 3);
+            $table->decimal('fee', 6, 2);
             $table->boolean('active');
             $table->timestamps();
         });

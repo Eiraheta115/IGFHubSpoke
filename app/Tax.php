@@ -8,7 +8,7 @@ class Tax extends Model
 {
   public function taxdetails()
   {
-    return $this->hasMany('App\TaxDetail');
+    return $this->hasMany('App\TaxDetail', 'taxe_id');
   }
 
 }

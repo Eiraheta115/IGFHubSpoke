@@ -16,7 +16,8 @@ class CreateTaxDetailsTable extends Migration
         Schema::create('tax_details', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('taxe_id');
-            $table->decimal('value', 4, 3);
+            $table->string('name');
+            $table->decimal('value', 7, 3);
             $table->timestamps();
         });
     }

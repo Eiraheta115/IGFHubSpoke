@@ -20,11 +20,11 @@ class CreateEmployeesTable extends Migration
             $table->boolean('retired');
             $table->date('admition');
             $table->date('retirement');
-            $table->decimal('comission', 2, 2)->nullable();
+            $table->decimal('comission', 6, 2)->nullable();
             $table->string('bankaccount');
             $table->boolean('day31');
             $table->integer('job_id');
-            $table->decimal('salary', 4, 2);
+            $table->decimal('salary', 6, 2);
             $table->integer('salarytype_id');
             $table->timestamps();
         });
