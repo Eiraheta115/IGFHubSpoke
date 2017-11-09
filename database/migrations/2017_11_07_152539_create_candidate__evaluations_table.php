@@ -17,7 +17,7 @@ class CreateCandidateEvaluationsTable extends Migration
             $table->increments('id');
             $table->integer('candidate_id');
             $table->integer('evaluation_id');
-            $table->decimal('grade', 4, 2);
+            $table->decimal('grade', 4, 2)->nullable();
             $table->timestamps();
         });
     }

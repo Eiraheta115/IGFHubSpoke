@@ -77,4 +77,11 @@ Route::delete('/jobs/{id}', 'JobController@delete');
 //Candidate
 Route::post('candidates', 'CandidateController@create');
 Route::get('/candidates/', 'CandidateController@list');
-Route::put('/candidates/{id}', 'CandidateController@updateState');
+Route::put('/candidates/{id}', 'CandidateController@update');
+Route::put('/candidates/{id}/state', 'CandidateController@updateState');
+//Evaluation
+Route::post('evaluations', 'EvaluationController@create');
+Route::get('/evaluations/', 'EvaluationController@list');
+Route::post('/evaluations/{id}/addCandidates', 'EvaluationController@massAddingCandidates');
+Route::put('/evaluations/{id}/state', 'EvaluationController@updateState');
+Route::post('/evaluations/{id}/candidates/{idCandidate}/qualify', 'EvaluationController@qualify');

@@ -8,7 +8,7 @@ class Candidate extends Model
 {
   public function evaluations()
   {
-   return $this->belongsToMany('App\Evaluation', 'Candidate__evaluations');
+   return $this->belongsToMany('App\Evaluation', 'candidate__evaluations');
   }
 
   public function People()

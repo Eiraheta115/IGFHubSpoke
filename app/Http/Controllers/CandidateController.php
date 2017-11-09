@@ -42,6 +42,18 @@ class CandidateController extends Controller
     return response()->json($jsonCandidate);
   }
 
+  public function update(){
+    $data= $request->json()->all();
+    $candidate=Candidate::find($id);
+    if (is_null($candidate)) {
+      return response()->json(['msj' => "Candidate not found"], 404);
+    }else{
+      $candidate->state=$data['state'];
+      $candidate->observation=$data['observation'];
+      $candidate->save();
+    }
+  }
+
   public function updateState($id, Request $request){
     $data= $request->json()->all();
     $candidates=Candidate::find($id);
