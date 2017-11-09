@@ -79,6 +79,8 @@ Route::post('candidates', 'CandidateController@create');
 Route::get('/candidates/', 'CandidateController@list');
 Route::put('/candidates/{id}', 'CandidateController@update');
 Route::put('/candidates/{id}/state', 'CandidateController@updateState');
+Route::get('/candidates/classified/', 'CandidateController@listClassified');
+Route::post('/candidates/{id}/hire', 'EmployeeController@hire');
 //Evaluation
 Route::post('evaluations', 'EvaluationController@create');
 Route::get('/evaluations/', 'EvaluationController@list');

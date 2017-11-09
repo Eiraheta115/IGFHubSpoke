@@ -12,7 +12,7 @@ class SalaryTypeController extends Controller
     $salary->name=$data['name'];
     $salary->active=true;
     $salary->save();
-    return $salary;
+    return response()->json(['saved' => true], 200);
   }
 
   // public function show($id){

@@ -39,7 +39,7 @@ class CandidateController extends Controller
         'fullname'=> $candidate->people->fullname
       ];
     }
-    return response()->json($jsonCandidate);
+    return response()->json($jsonCandidate, 200);
   }
 
   public function update(){
@@ -64,6 +64,72 @@ class CandidateController extends Controller
       $candidates->save();
       return response()->json(['updated' => true], 200);
     }
+  }
+
+  public function listClassified(){
+    $candidates=Candidate::all();
+    $jsonCandidateSubscribed[]=array();
+    $jsonCandidateInProcess[]=array();
+    $jsonCandidateFinalist[]=array();
+    $jsonCandidateDiscarded[]=array();
+
+    foreach ($candidates as $candidate) {
+      foreach ($candidate->evaluations as $evaluation) {
+          $jsonCandidateEvaluations[]=['name'=>$evaluation->name,
+          'grade'=> $evaluation->pivot->grade];
+      }
+
+      switch ($candidate->state) {
+        case 1:
+        $jsonCandidateSubscribed[]=[
+        'id'=> $candidate->id,
+        'state'=> $candidate->state,
+        'fullname'=> $candidate->people->fullname,
+        'Evaluation'=> $jsonCandidateEvaluations
+      ];
+          break;
+
+        case 2:
+        $jsonCandidateInProcess[]=[
+        'id'=> $candidate->id,
+        'state'=> $candidate->state,
+        'fullname'=> $candidate->people->fullname,
+        'Evaluation'=> $jsonCandidateEvaluations
+      ];
+          break;
+
+        case 3:
+        $jsonCandidateFinalist[]=[
+        'id'=> $candidate->id,
+        'state'=> $candidate->state,
+        'fullname'=> $candidate->people->fullname,
+        'Evaluation'=> $jsonCandidateEvaluations
+      ];
+          break;
+
+        case 4:
+        $jsonCandidateDiscarded[]=[
+        'id'=> $candidate->id,
+        'state'=> $candidate->state,
+        'fullname'=> $candidate->people->fullname,
+        'Evaluation'=> $jsonCandidateEvaluations
+      ];
+          break;
+
+        default:
+
+          break;
+      }
+      unset($jsonCandidateEvaluations);
+
+    }
+    $jsonCandidates[]=[
+      'Subscribed'=> $jsonCandidateSubscribed,
+      'InProcess'=> $jsonCandidateInProcess,
+      'Finalist'=> $jsonCandidateFinalist,
+      'Discarted'=> $jsonCandidateDiscarded
+    ];
+    return response()->json($jsonCandidates, 200);
   }
 
 }
