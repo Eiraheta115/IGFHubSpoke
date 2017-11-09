@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use Hash;
 use App\User;
 use App\Policy;
+
 use Illuminate\Http\Request;
 
 class UserControl extends Controller{
@@ -15,7 +17,7 @@ class UserControl extends Controller{
     $user->password=bcrypt($data['password']);
     $user->group_id=$data['group_id'];
     $user->save();
-    return $user;
+    return response()->json(['saved' => true], 201);
   }
 
   public function show($id){
@@ -42,7 +44,7 @@ class UserControl extends Controller{
       $user->fullname= $data['fullname'];
       $user->email=$data['email'];
       $user->save();
-      return response()->json(['msj' => "User updated",'user' => $user], 200);
+      return response()->json(['updated' => true], 200);
     }
   }
 
@@ -64,6 +66,20 @@ class UserControl extends Controller{
   $policy->code=$data['code'];
   $user->policies()->save($policy);
   return $user->policies;
+  }
+
+  public function login(Request $request){
+    $data= $request->json()->all();
+    $user=User::where('email',$data['email'])->first();
+    if (is_null($user)) {
+      return response()->json(['msj' => "User not found"], 404);
+    }else{
+      if (Hash::check($data['password'], $user->password)){
+        return $user;
+      }else{
+        return response()->json(['msj' => "Wrong password"], 400);
+       }
+    }
   }
 
 }

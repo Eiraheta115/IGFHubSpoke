@@ -11,7 +11,7 @@ class GroupController extends Controller
     $group = new Group;
     $group->name=$data['name'];
     $group->save();
-    return  $group;
+    return response()->json(['saved' => true], 201);
   }
 
   public function show($id){

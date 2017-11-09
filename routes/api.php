@@ -23,6 +23,7 @@ Route::get('/users/', 'UserControl@list');
 Route::put('/users/{id}', 'UserControl@update');
 Route::delete('/users/{id}', 'UserControl@delete');
 Route::post('users/{id}/policies/set', 'UserControl@setPolicies');
+Route::post('/auth/login/', 'UserControl@login');
 //Groups
 Route::post('groups', 'GroupController@create');
 Route::get('/groups/{id}', 'GroupController@show');

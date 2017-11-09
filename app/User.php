@@ -37,8 +37,4 @@ class User extends Authenticatable
         return $this->belongsTo('App\Group');
     }
 
-    public function employees()
-    {
-      return $this->belongsTo('App\Employee')
     }
-}
