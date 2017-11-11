@@ -42,6 +42,26 @@ class CandidateController extends Controller
     return response()->json($jsonCandidate, 200);
   }
 
+  public function byEvaluations($id){
+    $conv= (int)$id;
+    $jsonCandidates[]=array();
+    unset($jsonCandidates);
+    $candidates=Candidate::all();
+    foreach ($candidates as $candidate) {
+      foreach ($candidate->evaluations as $evaluation) {
+          if ($evaluation->pivot->evaluation_id==$conv) {
+            $jsonCandidates[]=[
+              'id'=> $candidate->id,
+              'state'=> $candidate->state,
+              'fullname'=> $candidate->people->fullname
+            ];
+          }
+      }
+
+    }
+    return response()->json($jsonCandidates, 200);
+  }
+
   public function update(){
     $data= $request->json()->all();
     $candidate=Candidate::find($id);
@@ -67,13 +87,14 @@ class CandidateController extends Controller
   }
 
   public function listClassified(){
-    $candidates=Candidate::all();
-    $jsonCandidateSubscribed[]=array();
-    $jsonCandidateInProcess[]=array();
-    $jsonCandidateFinalist[]=array();
-    $jsonCandidateDiscarded[]=array();
+    $jsonCandidateSubscribed=array();
+    $jsonCandidateInProcess=array();
+    $jsonCandidateFinalist=array();
+    $jsonCandidateDiscarded=array();
 
-    foreach ($candidates as $candidate) {
+    $candidates=Candidate::all();
+
+      foreach ($candidates as $candidate) {
       foreach ($candidate->evaluations as $evaluation) {
           $jsonCandidateEvaluations[]=['name'=>$evaluation->name,
           'grade'=> $evaluation->pivot->grade];
