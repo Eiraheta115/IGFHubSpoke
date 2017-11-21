@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 use Hash;
 use App\User;
 use App\Policy;
-
+use JWTAuth;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Input;
 class UserControl extends Controller{
 
   public function create(Request $request){
@@ -17,7 +17,8 @@ class UserControl extends Controller{
     $user->password=bcrypt($data['password']);
     $user->group_id=$data['group_id'];
     $user->save();
-    return response()->json(['saved' => true], 201);
+    $token= JWTAuth::fromUser($user);
+    return response()->json(['saved' => true, 'token'=> compact('token')], 201);
   }
 
   public function show($id){
@@ -70,15 +71,25 @@ class UserControl extends Controller{
 
   public function login(Request $request){
     $data= $request->json()->all();
+    $credentials = Input::only('email', 'password');
+    $jsonPolicies=array();
     $user=User::where('email',$data['email'])->first();
     if (is_null($user)) {
       return response()->json(['msj' => "User not found"], 404);
     }else{
-      if (Hash::check($data['password'], $user->password)){
-        return $user;
-      }else{
-        return response()->json(['msj' => "Wrong password"], 400);
-       }
+        if ( ! $token = JWTAuth::attempt($credentials)) {
+          return response()->json([false, HttpResponse::HTTP_UNAUTHORIZED], 400);
+        }
+        foreach ($user->policies as $policie) {
+          $jsonPolicies[]=($policie->code);
+        }
+        $userLogged=[
+          'fullname'=> $user->fullname,
+          'email'=> $user->email,
+          'policies'=>$jsonPolicies
+        ];
+        return response()->json(['token'=> compact('token'),'user' => $userLogged], 201);
+
     }
   }
 

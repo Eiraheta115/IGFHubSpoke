@@ -5,7 +5,8 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
-class User extends Authenticatable
+use Tymon\JWTAuth\Contracts\JWTSubject;
+class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
@@ -35,6 +36,15 @@ class User extends Authenticatable
     public function groups()
     {
         return $this->belongsTo('App\Group');
+    }
+
+    public function getJWTCustomClaims(): array{
+      return [];
+    }
+
+    public function getJWTIdentifier()
+    {
+      return $this->getKey();
     }
 
     }

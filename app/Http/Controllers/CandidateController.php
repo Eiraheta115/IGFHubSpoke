@@ -31,7 +31,8 @@ class CandidateController extends Controller
   }
 
   public function list(){
-    $candidates=Candidate::all();
+    $candidates=Candidate::where('hired', false)->get();
+    $jsonCandidate=array();
     foreach ($candidates as $candidate) {
       $jsonCandidate[]=[
         'id'=> $candidate->id,
@@ -92,9 +93,11 @@ class CandidateController extends Controller
     $jsonCandidateFinalist=array();
     $jsonCandidateDiscarded=array();
 
-    $candidates=Candidate::all();
+
+    $candidates=Candidate::where('hired', false)->get();
 
       foreach ($candidates as $candidate) {
+        $jsonCandidateEvaluations=array();
       foreach ($candidate->evaluations as $evaluation) {
           $jsonCandidateEvaluations[]=['name'=>$evaluation->name,
           'grade'=> $evaluation->pivot->grade];

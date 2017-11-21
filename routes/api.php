@@ -16,6 +16,13 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::middleware('jwt.auth')->group(function(){
+  Route::get('/candidates/', 'CandidateController@list');
+});
+// Route::group(['middleware' => 'jwt.auth'],function(){
+//   Route::get('/candidates/', 'CandidateController@list');
+//  });
+
 //Users
 Route::post('users', 'UserControl@create');
 Route::get('/users/{id}', 'UserControl@show');
@@ -26,10 +33,12 @@ Route::post('users/{id}/policies/set', 'UserControl@setPolicies');
 Route::post('/auth/login/', 'UserControl@login');
 //Groups
 Route::post('groups', 'GroupController@create');
+Route::post('/groups/{id}/addPolicies', 'GroupController@addPolicies');
 Route::get('/groups/{id}', 'GroupController@show');
 Route::get('/groups/', 'GroupController@list');
 Route::put('/groups/{id}', 'GroupController@update');
 Route::delete('/groups/{id}', 'GroupController@delete');
+Route::delete('/groups/{id}/removePolicies', 'GroupController@removePolicies');
 //Policies
 Route::post('policies', 'PolicyController@create');
 Route::get('/policies/{id}', 'PolicyController@show');
@@ -77,7 +86,7 @@ Route::put('/jobs/{id}', 'JobController@update');
 Route::delete('/jobs/{id}', 'JobController@delete');
 //Candidate
 Route::post('candidates', 'CandidateController@create');
-Route::get('/candidates/', 'CandidateController@list');
+// Route::get('/candidates/', 'CandidateController@list');
 Route::get('/evaluations/{id}/candidates/', 'CandidateController@byEvaluations');
 Route::put('/candidates/{id}', 'CandidateController@update');
 Route::put('/candidates/{id}/state', 'CandidateController@updateState');

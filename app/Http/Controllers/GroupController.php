@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Group;
+use App\Policy;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -48,6 +49,33 @@ class GroupController extends Controller
     }else{
       $group->delete();
       return response()->json(['msj' => "Group deleted"], 202);
+    }
+  }
+
+  public function addPolicies($id, Request $request){
+    $data= $request->json()->all();
+    $ids=$data['ids'];
+    $group= group::find($id);
+    if (is_null($group)) {
+      return response()->json(['msj'=> "Group not found"], 404);
+    }else {
+      foreach ($ids as $id) {
+        $policy=Policy::find($id);
+        $group->policies()->attach($policy->id);
+      }
+      return response()->json(['saved' => true], 201);
+    }
+  }
+
+  public function removePolicies($id, Request $request){
+    $data= $request->json()->all();
+    $ids=$data['ids'];
+    $group= group::find($id);
+    if (is_null($group)) {
+      return response()->json(['msj'=> "Group not found"], 404);
+    }else {
+      $group->policies()->detach($ids);
+      return response()->json(['deleted' => true], 202);
     }
   }
 }
