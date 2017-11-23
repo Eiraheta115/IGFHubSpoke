@@ -78,30 +78,29 @@ class UserControl extends Controller{
     if (is_null($user)) {
       return response()->json(['msj' => "User not found"], 404);
     }else{
+      foreach ($user->policies as $policie) {
+        $jsonPolicies[]=($policie->code);
+      }
+      $payloadable=$userLogged=[
+        'fullname'=> $user->fullname,
+        'email'=> $user->email,
+        'policies'=>$jsonPolicies
+      ];
         if ( ! $token = JWTAuth::attempt($credentials)) {
           return response()->json([false, HttpResponse::HTTP_UNAUTHORIZED], 400);
         }
-        foreach ($user->policies as $policie) {
-          $jsonPolicies[]=($policie->code);
-        }
-        $payloadable=$userLogged=[
-          'fullname'=> $user->fullname,
-          'email'=> $user->email,
-          'policies'=>$jsonPolicies
-        ];
 
-        $tokenUserData =  JWTAuth::encode( JWTFactory::make( $payloadable ) );
-        return response()->json(['token'=> $tokenUserData->get(),'user' => $userLogged], 201);
+
+        $payload = JWTFactory::userData($payloadable)->make();
+        $userToken = JWTAuth::encode($payload);
+        return response()->json(['token'=> $userToken->get(),'user' => $userLogged], 201);
 
     }
   }
 
-  public function decodeToken(Request $request)
-  {
-    $data= $request->json()->all();
-    $token=$data['token'];
-    $payload= JWTAuth::parseToken()->getPayload($token);
-    return response()->json(['Payload'=> $payload, 'status'=> 'c mamo :v'], 200);
+  public function decodeToken(){
+    $payload= JWTAuth::parseToken()->getPayload();
+    return response()->json(['Data'=> $payload->get('userData.policies')], 200);
   }
 
 }
