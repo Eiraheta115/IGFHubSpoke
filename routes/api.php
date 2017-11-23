@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::middleware('jwt.auth')->group(function(){
-  Route::get('/candidates/', 'CandidateController@list');
+//  Route::get('/candidates/', 'CandidateController@list');
 });
 // Route::group(['middleware' => 'jwt.auth'],function(){
 //   Route::get('/candidates/', 'CandidateController@list');
@@ -31,6 +31,7 @@ Route::put('/users/{id}', 'UserControl@update');
 Route::delete('/users/{id}', 'UserControl@delete');
 Route::post('users/{id}/policies/set', 'UserControl@setPolicies');
 Route::post('/auth/login/', 'UserControl@login');
+Route::post('/auth/decode/', 'UserControl@decodeToken');
 //Groups
 Route::post('groups', 'GroupController@create');
 Route::post('/groups/{id}/addPolicies', 'GroupController@addPolicies');
@@ -86,7 +87,7 @@ Route::put('/jobs/{id}', 'JobController@update');
 Route::delete('/jobs/{id}', 'JobController@delete');
 //Candidate
 Route::post('candidates', 'CandidateController@create');
-// Route::get('/candidates/', 'CandidateController@list');
+Route::get('/candidates/', 'CandidateController@list');
 Route::get('/evaluations/{id}/candidates/', 'CandidateController@byEvaluations');
 Route::put('/candidates/{id}', 'CandidateController@update');
 Route::put('/candidates/{id}/state', 'CandidateController@updateState');

@@ -7,6 +7,7 @@ use App\Policy;
 use JWTAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use JWTFactory;
 class UserControl extends Controller{
 
   public function create(Request $request){
@@ -83,14 +84,24 @@ class UserControl extends Controller{
         foreach ($user->policies as $policie) {
           $jsonPolicies[]=($policie->code);
         }
-        $userLogged=[
+        $payloadable=$userLogged=[
           'fullname'=> $user->fullname,
           'email'=> $user->email,
           'policies'=>$jsonPolicies
         ];
-        return response()->json(['token'=> compact('token'),'user' => $userLogged], 201);
+
+        $tokenUserData =  JWTAuth::encode( JWTFactory::make( $payloadable ) );
+        return response()->json(['token'=> $tokenUserData->get(),'user' => $userLogged], 201);
 
     }
+  }
+
+  public function decodeToken(Request $request)
+  {
+    $data= $request->json()->all();
+    $token=$data['token'];
+    $payload= JWTAuth::parseToken()->getPayload($token);
+    return response()->json(['Payload'=> $payload, 'status'=> 'c mamo :v'], 200);
   }
 
 }

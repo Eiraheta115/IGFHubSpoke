@@ -47,14 +47,34 @@ class Handler extends ExceptionHandler
      * @return \Illuminate\Http\Response
      */
      public function render($request, Exception $e)
- {
- 	if ($e instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException) {
- 		return response()->json(['Error with token'], $e->getStatusCode());
- 	} else if ($e instanceof Tymon\JWTAuth\Exceptions\TokenInvalidException) {
- 		return response()->json(['token_invalid'], $e->getStatusCode());
- 	}
-
- 	return parent::render($request, $e);
+     {
+       if ($e instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException) {
+   switch (get_class($e->getPrevious())) {
+       case \Tymon\JWTAuth\Exceptions\TokenExpiredException::class:
+           return response()->json([
+               'status' => 'error',
+               'message' => 'Token has expired'
+           ], $e->getStatusCode());
+           break;
+       case \Tymon\JWTAuth\Exceptions\TokenInvalidException::class:
+           return response()->json([
+               'status' => 'error',
+               'message' => 'Token is invalid'
+           ], $e->getStatusCode());
+           break;
+       case \Tymon\JWTAuth\Exceptions\TokenBlacklistedException::class:
+           return response()->json([
+               'status' => 'error',
+               'message' => 'Token is in black list'
+           ], $e->getStatusCode());
+           break;
+       default:
+           return response()->json([
+               'status' => 'error',
+               'message' => 'No token in headers'
+           ], $e->getStatusCode());
+           break;
+   }
  }
-
+     }
 }
