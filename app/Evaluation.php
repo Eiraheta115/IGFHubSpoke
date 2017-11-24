@@ -8,7 +8,7 @@ class Evaluation extends Model
 {
   public function candidates()
   {
-   return $this->belongsToMany('App\Candidate', 'candidate__evaluations');
+   return $this->belongsToMany('App\Candidate', 'candidate__evaluations')->withPivot('grade');
   }
 
 }

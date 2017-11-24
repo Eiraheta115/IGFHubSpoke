@@ -46,7 +46,7 @@ class CandidateController extends Controller
       }
       return response()->json($jsonCandidate, 200);
     }else {
-      return response()->json(['msj' => "You are not authorized to manage candidates"], 403);
+      return response()->json(['msj' => "You are not authorized to manage candidates"], 401);
     }
 
   }
@@ -55,14 +55,15 @@ class CandidateController extends Controller
     $conv= (int)$id;
     $jsonCandidates[]=array();
     unset($jsonCandidates);
-    $candidates=Candidate::all();
+      $candidates=Candidate::where('hired', false)->get();
     foreach ($candidates as $candidate) {
       foreach ($candidate->evaluations as $evaluation) {
           if ($evaluation->pivot->evaluation_id==$conv) {
             $jsonCandidates[]=[
               'id'=> $candidate->id,
               'state'=> $candidate->state,
-              'fullname'=> $candidate->people->fullname
+              'fullname'=> $candidate->people->fullname,
+              'grade'=> $evaluation->pivot->grade
             ];
           }
       }
