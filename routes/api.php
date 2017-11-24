@@ -31,7 +31,7 @@ Route::put('/users/{id}', 'UserControl@update');
 Route::delete('/users/{id}', 'UserControl@delete');
 Route::post('users/{id}/policies/set', 'UserControl@setPolicies');
 Route::post('/auth/login/', 'UserControl@login');
-Route::get('/auth/decode/', 'UserControl@decodeToken');
+Route::get('/auth/decode/', 'PermissionController@decodeToken');
 //Groups
 Route::post('groups', 'GroupController@create');
 Route::post('/groups/{id}/addPolicies', 'GroupController@addPolicies');

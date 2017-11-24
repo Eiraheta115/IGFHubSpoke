@@ -97,10 +97,4 @@ class UserControl extends Controller{
 
     }
   }
-
-  public function decodeToken(){
-    $payload= JWTAuth::parseToken()->getPayload();
-    return response()->json(['Data'=> $payload->get('userData.policies')], 200);
-  }
-
 }
