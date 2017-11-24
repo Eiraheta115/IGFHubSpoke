@@ -63,7 +63,7 @@ class CandidateController extends Controller
               'id'=> $candidate->id,
               'state'=> $candidate->state,
               'fullname'=> $candidate->people->fullname,
-              'grade'=> $evaluation->pivot->grade
+              'grade'=> (double)$evaluation->pivot->grade
             ];
           }
       }
