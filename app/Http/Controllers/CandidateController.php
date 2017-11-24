@@ -109,7 +109,7 @@ class CandidateController extends Controller
         $jsonCandidateEvaluations=array();
       foreach ($candidate->evaluations as $evaluation) {
           $jsonCandidateEvaluations[]=['name'=>$evaluation->name,
-          'grade'=> $evaluation->pivot->grade];
+          'grade'=> (double)$evaluation->pivot->grade];
       }
 
       switch ($candidate->state) {
