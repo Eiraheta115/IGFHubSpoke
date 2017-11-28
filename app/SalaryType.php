@@ -8,7 +8,7 @@ class SalaryType extends Model
 {
   public function employees()
   {
-    return $this->belongsToMany('App\Employee');
+    return $this->hasOne('App\Employee', 'salarytype_id');
   }
 
 }

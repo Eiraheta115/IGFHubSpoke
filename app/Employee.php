@@ -13,7 +13,7 @@ class Employee extends Model
 
   public function salaryTypes()
   {
-    return $this->hasOne('App\SalaryType');
+    return $this->belongsTo('App\SalaryType', 'salarytype_id');
   }
 
   public function users()
@@ -21,8 +21,18 @@ class Employee extends Model
     return $this->hasOne('App\User');
   }
 
+  public function taxes()
+  {
+    return $this->hasOne('App\Tax', 'pensionType_id');
+  }
+
   public function People()
   {
     return $this->morphOne('App\People', 'peopleable');
+  }
+
+  public function loans()
+  {
+    return $this->hasMany('App\Loan');
   }
 }

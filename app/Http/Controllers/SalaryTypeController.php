@@ -63,7 +63,7 @@ class SalaryTypeController extends Controller
       return response()->json(['msj' => "SalaryType not found"], 404);
     }else{
       $salary->delete();
-      return response()->json(['msj' => "User deleted"], 202);
+      return response()->json(['msj' => "SalaryType deleted"], 202);
     }
   }
 }

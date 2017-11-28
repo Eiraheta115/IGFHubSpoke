@@ -99,3 +99,10 @@ Route::get('/evaluations/', 'EvaluationController@list');
 Route::post('/evaluations/{id}/addCandidates', 'EvaluationController@massAddingCandidates');
 Route::put('/evaluations/{id}/state', 'EvaluationController@updateState');
 Route::post('/evaluations/{id}/candidates/{idCandidate}/qualify', 'EvaluationController@qualify');
+//LoanTypes
+Route::post('loantypes', 'LoanTypesController@create');
+Route::get('/loantypes/', 'LoanTypesController@list');
+Route::put('/loantypes/{id}', 'LoanTypesController@update');
+Route::delete('/loantypes/{id}', 'LoanTypesController@delete');
+//loans
+Route::post('/employees/{id}/loans', 'LoanController@create');

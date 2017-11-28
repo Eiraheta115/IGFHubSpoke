@@ -33,9 +33,12 @@ class EmployeeController extends Controller
         $employee->active=true;
         $employee->retired=false;
         $employee->admition=$data['admition'];
-        $employee->retirement=$data['retirement'];
+        // $employee->retirement=$data['retirement'];
         $employee->bankaccount=$data['bankaccount'];
-        $employee->day31=false;
+        $employee->timeIn=$data['timeIn'];
+        $employee->timeOut=$data['timeOut'];
+        $employee->pensionType_id=$data['pensionType_id'];
+        // $employee->day31=false;
         $employee->job_id=$data['job_id'];
         $employee->salary=$data['salary'];
         $employee->salarytype_id=$data['salarytype_id'];

@@ -15,17 +15,18 @@ class CreateEmployeesTable extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('salarytype_id');
+            $table->integer('pensionType_id');
+            $table->integer('job_id');
             $table->string('code');
             $table->boolean('active');
             $table->boolean('retired');
             $table->date('admition');
-            $table->date('retirement');
             $table->decimal('comission', 6, 2)->nullable();
             $table->string('bankaccount');
-            $table->boolean('day31');
-            $table->integer('job_id');
+            $table->time('timeIn');
+            $table->time('timeOut');
             $table->decimal('salary', 6, 2);
-            $table->integer('salarytype_id');
             $table->timestamps();
         });
     }

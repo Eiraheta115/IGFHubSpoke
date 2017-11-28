@@ -11,4 +11,9 @@ class Tax extends Model
     return $this->hasMany('App\TaxDetail', 'taxe_id');
   }
 
+  public function employees()
+  {
+      return $this->hasOne('App\Employee');
+  }
+
 }
