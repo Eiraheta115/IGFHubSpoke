@@ -53,9 +53,8 @@ class CandidateController extends Controller
 
   public function byEvaluations($id){
     $conv= (int)$id;
-    $jsonCandidates[]=array();
-    unset($jsonCandidates);
-      $candidates=Candidate::where('hired', false)->get();
+    $jsonCandidates=array();
+    $candidates=Candidate::where('hired', false)->get();
     foreach ($candidates as $candidate) {
       foreach ($candidate->evaluations as $evaluation) {
           if ($evaluation->pivot->evaluation_id==$conv) {
