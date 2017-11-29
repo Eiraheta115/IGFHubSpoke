@@ -59,9 +59,7 @@ class FiredRetiredController extends Controller
         $fired->rent=$valrent;
         $fired->total=$total;
         $fired->save();
-        return response()->json(['saved' => true, 'totalnt'=>$totalNoTax,
-      'isss'=>$valisss, 'rent'=>$valrent, 'afp'=>$afp, 'total'=>$total
-    ,'totalY'=>$totalYears, 'totalM'=>$totalMonths], 200);
+        return response()->json(['saved' => true], 200);
       }
 
 
