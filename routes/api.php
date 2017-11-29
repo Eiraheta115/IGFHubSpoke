@@ -48,7 +48,6 @@ Route::put('/policies/{id}', 'PolicyController@update');
 Route::delete('/policies/{id}', 'PolicyController@delete');
 //Rent
 Route::post('rents', 'RentController@create');
-Route::post('/rents/calculate/', 'RentController@calculate');
 //Route::get('/rent/{id}', 'RentController@show');
 Route::get('/rents/', 'RentController@list');
 Route::put('/rents/{id}', 'RentController@update');
@@ -111,3 +110,4 @@ Route::get('/loans/', 'LoanController@list');
 Route::put('/loans/{id}/discount', 'LoanController@discountLoan');
 //FiredRetired
 Route::post('/employees/{id}/fired', 'FiredRetiredController@fired');
+Route::post('/employees/{id}/retired', 'FiredRetiredController@retired');
