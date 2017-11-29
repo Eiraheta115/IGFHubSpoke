@@ -23,7 +23,7 @@ class Employee extends Model
 
   public function taxes()
   {
-    return $this->hasOne('App\Tax', 'pensionType_id');
+    return $this->belongsTo('App\Tax', 'pensionType_id');
   }
 
   public function People()

@@ -19,6 +19,9 @@ class CreateFiredretiresTable extends Migration
             $table->string('code_employee');
             $table->date('dateIn');
             $table->date('dateOut');
+            $table->decimal('isss', 6, 2);
+            $table->decimal('pension', 6, 2);
+            $table->decimal('rent', 6, 2);
             $table->decimal('total', 6, 2);
             $table->timestamps();
         });

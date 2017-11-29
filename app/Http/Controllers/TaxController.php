@@ -74,4 +74,9 @@ class TaxController extends Controller
       return response()->json(['msj' => "Tax deleted"], 202);
     }
   }
+  public function calculateISSS($value)
+  {
+    $isssValue=Tax::where('name','isss')->first();
+    return response()->json(['isss' => round($isssValue->client*$value, 2)], 200);
+  }
 }

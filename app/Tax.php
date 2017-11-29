@@ -13,7 +13,7 @@ class Tax extends Model
 
   public function employees()
   {
-      return $this->hasOne('App\Employee');
+      return $this->hasOne('App\Employee', 'pensionType_id');
   }
 
 }

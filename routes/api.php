@@ -48,6 +48,7 @@ Route::put('/policies/{id}', 'PolicyController@update');
 Route::delete('/policies/{id}', 'PolicyController@delete');
 //Rent
 Route::post('rents', 'RentController@create');
+Route::post('/rents/calculate/', 'RentController@calculate');
 //Route::get('/rent/{id}', 'RentController@show');
 Route::get('/rents/', 'RentController@list');
 Route::put('/rents/{id}', 'RentController@update');
@@ -107,3 +108,6 @@ Route::delete('/loantypes/{id}', 'LoanTypesController@delete');
 //loans
 Route::post('/employees/{id}/loans', 'LoanController@create');
 Route::get('/loans/', 'LoanController@list');
+Route::put('/loans/{id}/discount', 'LoanController@discountLoan');
+//FiredRetired
+Route::post('/employees/{id}/fired', 'FiredRetiredController@fired');

@@ -44,10 +44,20 @@ class LoanController extends Controller
     }
   }
 
-  public function list()
-  {
+  public function list(){
    $loans=Loan::select('id','code_loan','code_employee','deadline', 'value', 'fee')->get();
    return response()->json($loans);
+  }
+
+  public function discountLoan($id){
+    $loan=Loan::find($id);
+    if (is_null($loan)) {
+      return response()->json(['msj' => "Loan not found"], 404);
+    }else {
+      $loan->debt=$loan->debt-$loan->fee;
+      $loan->save();
+      return response()->json(['updated' => true], 202);
+    }
   }
 
 }
