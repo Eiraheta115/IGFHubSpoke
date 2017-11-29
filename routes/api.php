@@ -106,3 +106,4 @@ Route::put('/loantypes/{id}', 'LoanTypesController@update');
 Route::delete('/loantypes/{id}', 'LoanTypesController@delete');
 //loans
 Route::post('/employees/{id}/loans', 'LoanController@create');
+Route::get('/loans/', 'LoanController@list');

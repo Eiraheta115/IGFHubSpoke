@@ -20,6 +20,7 @@ class LoanController extends Controller
       $loan->code_loan=$data['code_loan'];
       $loan->deadline=$data['deadline'];
       $loan->value=$data['value'];
+      $loan->debt=$data['value'];
       $date1 = date("Y-m-d");
       $date2 = $data['deadline'];
       $diff = abs(strtotime($date2) - strtotime($date1))/(60*60*24);
@@ -42,4 +43,11 @@ class LoanController extends Controller
       return response()->json(['saved' => true], 200);
     }
   }
+
+  public function list()
+  {
+   $loans=Loan::select('id','code_loan','code_employee','deadline', 'value', 'fee')->get();
+   return response()->json($loans);
+  }
+
 }

@@ -22,6 +22,7 @@ class CreateLoansTable extends Migration
             $table->date('deadline');
             $table->decimal('value', 6, 2);
             $table->decimal('fee', 6, 2);
+            $table->decimal('debt', 6, 2);
             $table->boolean('payed');
             $table->timestamps();
         });
