@@ -90,10 +90,20 @@ class UserControl extends Controller{
           return response()->json([false, HttpResponse::HTTP_UNAUTHORIZED], 400);
         }
 
+        $PermissionController='App\Http\Controllers\PermissionController';
+        $json=app($PermissionController)->validateAccounttant($user);
+        $value=$json->getData()->value;
+
+
+        if ($value==true) {
+          $msj=$json->getData()->msj;
+        }else {
+          $msj=null;
+        }
 
         $payload = JWTFactory::userData($payloadable)->make();
         $userToken = JWTAuth::encode($payload);
-        return response()->json(['token'=> $userToken->get(),'user' => $userLogged], 201);
+        return response()->json(['token'=> $userToken->get(),'user' => $userLogged, 'msj'=> $msj], 201);
 
     }
   }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use JWTAuth;
+use App\User;
 
 class PermissionController extends Controller
 {
@@ -26,4 +27,23 @@ class PermissionController extends Controller
       return response()->json(['value'=> false]);
      }
     }
+
+  public function validateAccounttant($user){
+      if ($user->email=="eiraheta@ues.com") {
+        $date1 = date("Y-m-d");
+        switch ($date1) {
+          case '2017-11-29':
+            $msj="Hay que calcular Aguinaldo";
+            break;
+
+          default:
+            $msj=null;
+            break;
+        }
+        return response()->json(['value'=> true, 'msj'=>$msj]);
+      }else {
+        $msj=null;
+        return response()->json(['value'=> false, 'msj'=>$msj]);
+      }
+  }
 }
