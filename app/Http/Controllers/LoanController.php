@@ -56,8 +56,7 @@ class LoanController extends Controller
     }else {
       $loan->debt=$loan->debt-$loan->fee;
       $loan->save();
-      return response()->json(['updated' => true], 202);
-    }
+      }
   }
 
 }

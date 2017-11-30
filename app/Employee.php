@@ -33,6 +33,11 @@ class Employee extends Model
 
   public function loans()
   {
-    return $this->hasMany('App\Loan');
+    return $this->hasMany('App\Loan','employees_id');
+  }
+
+  public function pays()
+  {
+   return $this->belongsToMany('App\Pay', 'pays_employees')->withPivot('code_employee','baseSalary', 'days', 'bond', 'ISSS', 'pension', 'rent', 'loans', 'otherDiscounts', 'otherIncomes', 'total');
   }
 }

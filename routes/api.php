@@ -111,3 +111,12 @@ Route::put('/loans/{id}/discount', 'LoanController@discountLoan');
 //FiredRetired
 Route::post('/employees/{id}/fired', 'FiredRetiredController@fired');
 Route::post('/employees/{id}/retired', 'FiredRetiredController@retired');
+//employees
+Route::get('/employees/', 'EmployeeController@list');
+//Pays
+Route::post('/pays/', 'PayController@generate');
+Route::get('/pays/', 'PayController@list');
+Route::get('/pays/{id}/', 'PayController@show');
+Route::put('/pays/{id}/', 'PayController@calculate');
+Route::post('/pays/{idPay}/employees/{idEmployee}/otherDiscounts/', 'PayController@otherDiscounts');
+Route::post('/pays/{idPay}/employees/{idEmployee}/otherIncomes/', 'PayController@otherIncomes');

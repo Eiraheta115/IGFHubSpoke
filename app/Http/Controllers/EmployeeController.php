@@ -51,4 +51,17 @@ class EmployeeController extends Controller
         return response()->json(['saved' => true], 201);
       }
     }
+    public function list(){
+      $employees=Employee::where('active',true)->get();
+      $jsonEmployees=array();
+      foreach ($employees as $employee) {
+        $jsonEmployees[]=[
+          'id'=> $employee->id,
+          'code'=> $employee->code,
+          'fullname'=> $employee->people->fullname
+        ];
+      }
+      return response()->json($jsonEmployees, 200);
+    }
+
 }

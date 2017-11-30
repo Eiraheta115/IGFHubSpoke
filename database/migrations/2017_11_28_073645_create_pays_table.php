@@ -16,7 +16,7 @@ class CreatePaysTable extends Migration
         Schema::create('pays', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->boolean('description')->nullable();
+            $table->string('description')->nullable();
             $table->date('datePay');
             $table->timestamps();
         });
