@@ -91,15 +91,29 @@ class PayController extends Controller
       return response()->json(['Pays' => $pays], 200);
     }
 
-    // public function listDetalied($id)
-    // {
-    //   $pay=Pay::find($id);
-    //     if (is_null($pay)) {
-    //     return response()->json(['msj' => "Pay not found"], 404);
-    //   }else{
-    //
-    //   }
-    // }
+    public function listDetalied($id)
+    {
+      $pay=Pay::find($id);
+      $jsonEmployees=array();
+        if (is_null($pay)) {
+        return response()->json(['msj' => "Pay not found"], 404);
+      }else{
+        foreach ($pay->employees as $employee) {
+          $jsonEmployees[]=['code'=>$employee->pivot->code_employee,
+                            'baseSalary'=>$employee->pivot->baseSalary,
+                            'days'=>$employee->pivot->days,
+                            'bond'=>$employee->pivot->bond,
+                            'ISSS'=>$employee->pivot->ISSS,
+                            'pension'=>$employee->pivot->pension,
+                            'rent'=>$employee->pivot->rent,
+                            'loans'=>$employee->pivot->loans,
+                            'otherDiscounts'=>$employee->pivot->otherDiscounts,
+                            'otherIncomes'=>$employee->pivot->otherIncomes,
+                            'total'=>$employee->pivot->total,];
+        }
+        return response()->json($jsonEmployees, 200);
+      }
+    }
 
     public function show($id){
       $pay=Pay::find($id);
