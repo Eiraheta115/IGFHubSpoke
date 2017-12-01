@@ -87,7 +87,7 @@ class UserControl extends Controller{
         'policies'=>$jsonPolicies
       ];
         if ( ! $token = JWTAuth::attempt($credentials)) {
-          return response()->json([false, HttpResponse::HTTP_UNAUTHORIZED], 400);
+          return response()->json(['msj'=>"invalid credentials"], 400);
         }
 
         $PermissionController='App\Http\Controllers\PermissionController';

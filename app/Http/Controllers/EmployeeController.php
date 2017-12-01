@@ -58,7 +58,8 @@ class EmployeeController extends Controller
         $jsonEmployees[]=[
           'id'=> $employee->id,
           'code'=> $employee->code,
-          'fullname'=> $employee->people->fullname
+          'fullname'=> $employee->people->fullname,
+          'salarytype'=>$employee->salarytype_id
         ];
       }
       return response()->json($jsonEmployees, 200);

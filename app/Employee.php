@@ -40,4 +40,8 @@ class Employee extends Model
   {
    return $this->belongsToMany('App\Pay', 'pays_employees')->withPivot('code_employee','baseSalary', 'days', 'bond', 'ISSS', 'pension', 'rent', 'loans', 'otherDiscounts', 'otherIncomes', 'total');
   }
+
+  public function attendances(){
+    return $this->belongsToMany('App\Attendence', 'attendance_employees')->withPivot('date','checkType','forgiven','observation', 'code_employee');
+   }
 }
