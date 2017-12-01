@@ -40,12 +40,12 @@ class LoanController extends Controller
        }
       $loan->payed=false;
       $loan->save();
-      return response()->json(['saved' => true], 200);
+      return response()->json(['saved' => true], 201);
     }
   }
 
   public function list(){
-   $loans=Loan::select('id','code_loan','code_employee','deadline', 'value', 'fee')->get();
+   $loans=Loan::select('id','code_loan','code_employee','deadline', 'value', 'fee', 'debt')->get();
    return response()->json($loans);
   }
 
@@ -64,6 +64,7 @@ class LoanController extends Controller
       }
 
       }
+      return response()->json(['updated' => true], 200);
   }
 
 }

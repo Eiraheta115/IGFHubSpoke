@@ -76,7 +76,7 @@ class FiredRetiredController extends Controller
           $fired->total=$total;
           $employee->save();
           $fired->save();
-          return response()->json(['saved' => true], 200);
+          return response()->json(['dateIn'=>$employee->admition, 'dateOut'=>$data['dateOut'], 'salary'=> $employee->salary,'total'=>round($total, 2), 'saved' => true], 200);
         }else{
           return response()->json(['msj' => "Employee not valid"], 400);
         }
@@ -152,7 +152,7 @@ class FiredRetiredController extends Controller
           $fired->total=$total;
           $employee->save();
           $fired->save();
-          return response()->json(['saved' => true], 200);
+          return response()->json(['dateIn'=>$employee->admition, 'dateOut'=>$data['dateOut'], 'salary'=> $employee->salary,'total'=>round($total, 2), 'saved' => true], 200);
         }else{
           return response()->json(['msj' => "Employee not valid"], 400);
         }
