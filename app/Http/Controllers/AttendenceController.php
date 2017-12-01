@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Employee;
 use App\Attendence;
+use App\AttEmployee;
 use Illuminate\Http\Request;
 use Log;
 class AttendenceController extends Controller
@@ -29,7 +30,7 @@ class AttendenceController extends Controller
 
         $date = $year.'/'.$month.'/'.$i; //format date
         $get_name = date('l', strtotime($date)); //get week day
-        $day_name = substr($get_name, 0, 3); // Trim day name to 3 chars
+          $day_name = substr($get_name, 0, 3); // Trim day name to 3 chars
 
         //if not a weekend add day to array
         if($day_name != 'Sun' && $day_name != 'Sat'){
@@ -56,6 +57,9 @@ class AttendenceController extends Controller
       $attendance= Attendence::find($id);
 
       foreach ($attendance->employees as $employee) {
+        $pivotId=$employee->pivot->id;
+        $emploAtt=AttEmployee::find($pivotId);
+
         $attTimestap=$employee->pivot->date;
         $code=$employee->pivot->code_employee;
         $attDaytime=explode(" ",$attTimestap);
@@ -74,14 +78,24 @@ class AttendenceController extends Controller
               $checkType="I";
           }
           if ($code==$code_employee && strtotime($attDay)==strtotime($day) && $employee->pivot->checkType==$checkType) {
-              //$attendance->employees()->updateExistingPivot($employee->id,['date'=>$timestamp,'checkType'=>$checkType]);
-              $json1[]=['codeJ'=>$code_employee, 'codeBD'=>$code, 'dayJ'=>$timestamp, 'dayBD'=>$attDay];
+              $emploAtt->date=$timestamp;
+              $emploAtt->checkType=$checkType;
+              $emploAtt->observation="Guardado";
+              $emploAtt->forgiven=true;
+              $emploAtt->save();
+            //  $attendance->employees()->updateExistingPivot($employee->pivot->employee_id,['date'=>$timestamp,'checkType'=>$checkType]);
+              $json1[]=['id_table'=>$employee->pivot->id, 'codeJ'=>$code_employee, 'codeBD'=>$code, 'dayJ'=>$timestamp, 'dayBD'=>$attDay];
           }else {
             $json2[]=['codeJ'=>$code_employee, 'codeBD'=>$code, 'dayJ'=>$timestamp, 'dayBD'=>$attDay];
           }
         }
       }
-      return response()->json(['updated' => true,'json1'=>$json1,'json2'=>$json2], 200);
+      return response()->json(['updated' => true], 200);
     }
+
+    // public function employeeByMonth(Request $request){
+    //   $data= $request->json()->all();
+    //   $emploAtt=AttEmployee::where('date','like', $data['year'].'a%');
+    // }
 
 }

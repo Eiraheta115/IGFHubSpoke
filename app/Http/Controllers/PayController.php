@@ -91,6 +91,16 @@ class PayController extends Controller
       return response()->json(['Pays' => $pays], 200);
     }
 
+    // public function listDetalied($id)
+    // {
+    //   $pay=Pay::find($id);
+    //     if (is_null($pay)) {
+    //     return response()->json(['msj' => "Pay not found"], 404);
+    //   }else{
+    //
+    //   }
+    // }
+
     public function show($id){
       $pay=Pay::find($id);
       if (is_null($pay)) {
