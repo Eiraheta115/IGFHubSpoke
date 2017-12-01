@@ -179,7 +179,7 @@ class CandidateController extends Controller
                                'cellphone'=> $candidate->people->cellphone,
                                'sex'=> $candidate->people->sex,
                                'CivilStatus'=> CivilStatus::find($candidate->people->civilstatus_id)->name,
-                               'direction'=> $candidate->people->direction,], 404);
+                               'direction'=> $candidate->people->direction,], 200);
     }
   }
 

@@ -54,8 +54,15 @@ class LoanController extends Controller
     if (is_null($loan)) {
       return response()->json(['msj' => "Loan not found"], 404);
     }else {
-      $loan->debt=$loan->debt-$loan->fee;
-      $loan->save();
+      if ($loan->debt<$loan->fee) {
+        $loan->debt=$loan->debt-$loan->debt;
+        $loan->payed=true;
+        $loan->save();
+      }else {
+        $loan->debt=$loan->debt-$loan->fee;
+        $loan->save();
+      }
+
       }
   }
 
