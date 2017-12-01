@@ -65,4 +65,16 @@ class EmployeeController extends Controller
       return response()->json($jsonEmployees, 200);
     }
 
+    public function show($code)
+    {
+      $employees=Employee::where('code', $code)->first();
+      if (is_null($employees)) {
+        return response()->json(['msj' => "Employee not found"], 404);
+      }else {
+        return response()->json(['id'=>$employees->id,
+                                'code' => $employees->code,
+                                'fullname'=>$employees->people->fullname,], 200);
+      }
+    }
+
 }
