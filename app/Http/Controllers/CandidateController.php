@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Candidate;
 use App\People;
+use App\CivilStatus;
 use Illuminate\Http\Request;
 
 class CandidateController extends Controller
@@ -162,6 +163,24 @@ class CandidateController extends Controller
       'Discarted'=> $jsonCandidateDiscarded
     ];
     return response()->json($jsonCandidates, 200);
+  }
+
+  public function show($id)
+  {
+    $candidate=Candidate::find($id);
+    if ($candidate->hired==true) {
+        return response()->json(['msj' => "Candidate is already hired"], 400);
+    }else {
+      return response()->json(['fullname' => $candidate->people->fullname,
+                               'dui'=> $candidate->people->dui,
+                               'nit'=> $candidate->people->nit,
+                               'isss'=> $candidate->people->isss,
+                               'telephone'=> $candidate->people->telephone,
+                               'cellphone'=> $candidate->people->cellphone,
+                               'sex'=> $candidate->people->sex,
+                               'CivilStatus'=> CivilStatus::find($candidate->people->civilstatus_id)->name,
+                               'direction'=> $candidate->people->direction,], 404);
+    }
   }
 
 }

@@ -13,7 +13,7 @@ class AttendenceController extends Controller
       $attendance->name=$data['name'];
       $attendance->type="mensual";
       $attendance->divison=1;
-      $array= $data['array'];
+      // $array= $data['array'];
 
       $conditions=['active'=>true, 'salarytype_id'=>1];
       $employees=Employee::where($conditions)->get();
@@ -38,6 +38,7 @@ class AttendenceController extends Controller
 
       }
       $attendance->save();
+      $type=["I","O"];
       for ($j=0; $j <count($workdays) ; $j++) {
         for ($i=0; $i <2 ; $i++) {
           foreach ($employees as $employee) {
@@ -49,39 +50,38 @@ class AttendenceController extends Controller
       return response()->json(['saved' => true], 201);
     }
 
-    // public function massUpdate($id, Request $request){
-    //   $data= $request->json()->all();
-    //   $array= $data['array'];
-    //   $attendance= Attendence::find($id);
-    //
-    //   foreach ($attendance->employees as $employee) {
-    //     $attTimestap=$employee->pivot->date;
-    //     $code=$employee->pivot->code_employee;
-    //     $attDaytime=explode(" ",$attTimestap);
-    //     $attDay=$attDaytime[0];
-    //     $attHour=$attDaytime[1];
-    //
-    //     for ($i=0; $i <count($array) ; $i++) {
-    //       $timestamp=$array[$i]['fecha'];
-    //       $code_employee=$array[$i]['code'];
-    //       $datetime = explode(" ",$timestamp);
-    //       $hour=$datetime[1];
-    //       $day=$datetime[0];
-    //       if (strtotime($hour)>strtotime("12:00")) {
-    //           $checkType="O";
-    //       }else {
-    //           $checkType="I";
-    //       }
-    //       if ($code==$code_employee && strtotime($attDay)==strtotime($day) && $employee->pivot->checkType==$checkType) {
-    //           $attendance->employees()->updateExistingPivot($employee->id,['date'=>$timestamp,'checkType'=>$checkType]);
-    //       }else {
-    //         $attendance->employees()->updateExistingPivot($employee->id,['date'=>$timestamp,'checkType'=>$checkType]);
-    //       }
-    //     }
-    //
-    //
-    //   }
-    //   return response()->json(['updated' => true,'json1'=>$json1], 200);
-    // }
+    public function massUpdate($id, Request $request){
+      $data= $request->json()->all();
+      $array= $data['array'];
+      $attendance= Attendence::find($id);
+
+      foreach ($attendance->employees as $employee) {
+        $attTimestap=$employee->pivot->date;
+        $code=$employee->pivot->code_employee;
+        $attDaytime=explode(" ",$attTimestap);
+        $attDay=$attDaytime[0];
+        $attHour=$attDaytime[1];
+
+        for ($i=0; $i <count($array) ; $i++) {
+          $timestamp=$array[$i]['fecha'];
+          $code_employee=$array[$i]['code'];
+          $datetime = explode(" ",$timestamp);
+          $hour=$datetime[1];
+          $day=$datetime[0];
+          if (strtotime($hour)>strtotime("12:00")) {
+              $checkType="O";
+          }else {
+              $checkType="I";
+          }
+          if ($code==$code_employee && strtotime($attDay)==strtotime($day) && $employee->pivot->checkType==$checkType) {
+              //$attendance->employees()->updateExistingPivot($employee->id,['date'=>$timestamp,'checkType'=>$checkType]);
+              $json1[]=['codeJ'=>$code_employee, 'codeBD'=>$code, 'dayJ'=>$timestamp, 'dayBD'=>$attDay];
+          }else {
+            $json2[]=['codeJ'=>$code_employee, 'codeBD'=>$code, 'dayJ'=>$timestamp, 'dayBD'=>$attDay];
+          }
+        }
+      }
+      return response()->json(['updated' => true,'json1'=>$json1,'json2'=>$json2], 200);
+    }
 
 }
