@@ -17,6 +17,7 @@ class PayController extends Controller
       $pay->name=$data['name'];
       $pay->description=$data['description'];
       $pay->datePay=$data['datePay'];
+      $pay->calculated=false;
       $pay->save();
       foreach ($employees as $employee) {
         $jsonisss=app($TaxController)->calculateISSS($employee->salary);
@@ -34,20 +35,24 @@ class PayController extends Controller
     public function calculate($id, Request $request){
       $data= $request->json()->all();
       $pay= Pay::find($id);
-      foreach ($pay->employees as $employee) {
-        $valloan=0;
-        if ($employee->salarytype_id=$data['salarytype_id']) {
+      if ($pay->calculated==true) {
+        return response()->json(['Pay is already calculated' => true], 400);
+      }else {
+        foreach ($pay->employees as $employee) {
+          $valloan=0;
           $total=$employee->pivot->total;
           foreach ($employee->loans as $loan) {
             if ($loan->payed==false) {
-               $valloan= $valloan+$loan->fee;
-               app('App\Http\Controllers\LoanController')->discountLoan($loan->id);
-            }
+                $valloan= $valloan+$loan->fee;
+                app('App\Http\Controllers\LoanController')->discountLoan($loan->id);
+              }
           }
-          $pay->employees()->updateExistingPivot($employee->id,['loans'=>$valloan,'total'=>$total-$valloan]);
+            $pay->employees()->updateExistingPivot($employee->id,['loans'=>$valloan,'total'=>$total-$valloan]);
         }
+        $pay->calculated=true;
+        $pay->save();
+        return response()->json(['calculated' => true], 200);
       }
-      return response()->json(['calculated' => true], 200);
     }
 
     public function otherDiscounts($idPay, $idEmployee, Request $request){
@@ -91,31 +96,7 @@ class PayController extends Controller
       return response()->json(['Pays' => $pays], 200);
     }
 
-    public function listDetalied($id)
-    {
-      $pay=Pay::find($id);
-      $jsonEmployees=array();
-        if (is_null($pay)) {
-        return response()->json(['msj' => "Pay not found"], 404);
-      }else{
-        foreach ($pay->employees as $employee) {
-          $jsonEmployees[]=['code'=>$employee->pivot->code_employee,
-                            'baseSalary'=>$employee->pivot->baseSalary,
-                            'days'=>$employee->pivot->days,
-                            'bond'=>$employee->pivot->bond,
-                            'ISSS'=>$employee->pivot->ISSS,
-                            'pension'=>$employee->pivot->pension,
-                            'rent'=>$employee->pivot->rent,
-                            'loans'=>$employee->pivot->loans,
-                            'otherDiscounts'=>$employee->pivot->otherDiscounts,
-                            'otherIncomes'=>$employee->pivot->otherIncomes,
-                            'total'=>$employee->pivot->total,];
-        }
-        return response()->json($jsonEmployees, 200);
-      }
-    }
-
-    public function show($id){
+      public function show($id){
       $pay=Pay::find($id);
       if (is_null($pay)) {
         return response()->json(['msj' => "Pay not found"], 404);

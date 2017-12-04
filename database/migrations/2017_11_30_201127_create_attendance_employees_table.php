@@ -18,8 +18,8 @@ class CreateAttendanceEmployeesTable extends Migration
             $table->integer('attendance_id');
             $table->integer('employee_id');
             $table->string('code_employee');
-            $table->dateTime('date');
-            $table->string('checkType');
+            $table->dateTime('hourIn');
+            $table->dateTime('hourOut');
             $table->boolean('forgiven');
             $table->string('observation')->nullable();
             $table->timestamps();

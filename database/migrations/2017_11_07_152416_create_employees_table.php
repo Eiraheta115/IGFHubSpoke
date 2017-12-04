@@ -28,6 +28,7 @@ class CreateEmployeesTable extends Migration
             $table->time('timeOut');
             $table->decimal('salary', 6, 2);
             $table->timestamps();
+            $table->unique('code');
         });
     }
 

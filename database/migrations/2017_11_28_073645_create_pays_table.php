@@ -18,6 +18,7 @@ class CreatePaysTable extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->date('datePay');
+            $table->boolean('calculated');
             $table->timestamps();
         });
     }
