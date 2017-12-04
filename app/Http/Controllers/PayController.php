@@ -92,7 +92,7 @@ class PayController extends Controller
     }
 
     public function list(){
-      $pays=Pay::select('id','name','description','datePay')->get();
+      $pays=Pay::select('id','name','description','datePay', 'calculated')->get();
       return response()->json(['Pays' => $pays], 200);
     }
 
