@@ -85,14 +85,22 @@ class AttendenceController extends Controller
           if ($employee->pivot->code_employee==$code_employee && $employee->pivot->hourIn==$day . " 00:00:00") {
             if (strtotime($hour)>=strtotime("12:00")) {
              $emploAtt->hourOut=$timestamp;
+             if (strtotime(substr($emploAtt->hourIn,11))!=strtotime("00:00:00")) {
+               $emploAtt->forgiven=true;
+             }else {
+               $emploAtt->forgiven=false;
+             }
              $emploAtt->observation="Guardado";
-             $emploAtt->forgiven=true;
              $emploAtt->save();
-              
+
             }else {
                $emploAtt->hourIn=$timestamp;
+               if (strtotime(substr($emploAtt->hourOut,11))!=strtotime("00:00:00")) {
+                 $emploAtt->forgiven=true;
+               }else {
+                 $emploAtt->forgiven=false;
+               }
                $emploAtt->observation="Guardado";
-               $emploAtt->forgiven=true;
                $emploAtt->save();
 
             }
