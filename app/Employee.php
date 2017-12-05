@@ -42,6 +42,6 @@ class Employee extends Model
   }
 
   public function attendances(){
-    return $this->belongsToMany('App\Attendence', 'attendance_employees')->withPivot('id','hourIn','hourOut','forgiven','observation', 'code_employee');
+    return $this->belongsToMany('App\Attendence', 'attendance_employees', 'attendance_id', 'employee_id')->withPivot('id','hourIn','hourOut','forgiven','observation', 'code_employee');
    }
 }

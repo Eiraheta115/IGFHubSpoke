@@ -113,5 +113,97 @@ class AttendenceController extends Controller
       return response()->json(['updated' => true], 200);
     }
 
+    public function show($idAtt, $code){
+      $attendance=Attendence::find($idAtt);
+      $employees=Employee::where('code', $code)->first();
+      if (is_null($employees)) {
+        return response()->json(['msj' => "Employee not found"], 404);
+      }else {
+        if (is_null($attendance)) {
+          return response()->json(['msj' => "Attendance not found for this month"], 404);
+        }else{
+          $conditions=['attendance_id'=>$idAtt, 'employee_id'=>$employees->id];
+          $attendances=AttEmployee::select('id','hourIn','hourOut','observation')->where($conditions)->get();
+          foreach ($attendances as $attendance) {
+            $att[]=[
+                    'id'=>$attendance->id,
+                    'date'=>substr($attendance->hourIn,0,10),
+                    'hourIn'=>substr($attendance->hourIn,11),
+                    'hourOut'=>substr($attendance->hourOut,11)
+            ];
+          }
+        }
+        return response()->json(['Attendances' => $att], 200);
+      }
+    }
+
+    public function showAbsences($idAtt, $code){
+      $attendance=Attendence::find($idAtt);
+      $employees=Employee::where('code', $code)->first();
+      if (is_null($employees)) {
+        return response()->json(['msj' => "Employee not found"], 404);
+      }else {
+        if (is_null($attendance)) {
+          return response()->json(['msj' => "Attendance not found for this month"], 404);
+        }else{
+          $conditions=['attendance_id'=>$idAtt, 'employee_id'=>$employees->id, 'forgiven'=>false];
+          $attendances=AttEmployee::select('id','hourIn','hourOut','observation')->where($conditions)->get();
+          foreach ($attendances as $attendance) {
+            $att[]=[
+                    'id'=>$attendance->id,
+                    'date'=>substr($attendance->hourIn,0,10),
+                    'hourIn'=>substr($attendance->hourIn,11),
+                    'hourOut'=>substr($attendance->hourOut,11)
+            ];
+          }
+        }
+        return response()->json(['Attendances' => $att], 200);
+      }
+    }
+
+    public function list(){
+      $attendances=Attendence::select('id','name','type','divison')->get();
+      return response()->json(['Attendances' => $attendances], 200);
+    }
+
+    public function update($id, Request $request){
+        $data= $request->json()->all();
+        $attendance=AttEmployee::find($id);
+        if (is_null($attendance)) {
+          return response()->json(['msj' => "Attendance not found"], 404);
+        }else {
+          $day=substr($attendance->hourIn,0,10);
+          $attendance->hourIn=$day . " " . $data['hourIn'];
+          $attendance->hourOut=$day . " " .$data['hourOut'];
+          $attendance->forgiven=true;
+          $attendance->observation=$data['observation'];
+          $attendance->save();
+          return response()->json(['updated' => true], 200);
+        }
+    }
+
+    public function getHours($id){
+      $employee=Employee::find($id);
+      foreach ($employee->attendances as $attendance) {
+        $hours=0;
+        $hourIn=strtotime(substr($attendance->pivot->hourIn,11));
+        $hourOut=strtotime(substr($attendance->pivot->hourOut,11));
+
+        if ($hourIn<strtotime("08:00:00")) {
+          $hourIn=strtotime("08:00:00");
+        }
+        if ($hourOut>strtotime("17:00:00")) {
+          $hourIn=strtotime("17:00:00");
+        }
+        if ($hourIn==strtotime("00:00:00") && $hourOut>strtotime("12:00:00")) {
+          $hour=strtotime("12:00:00")-$hourOut;
+        }
+        if ($hourOut==strtotime("00:00:00") && $hourIn>strtotime("08:00:00")) {
+          $hour-$hourIn-strtotime("08:00:00");
+        }
+        $hours+=$hour;
+      }
+      return response()->json(['hours' => round($hours/3600,2)], 200);
+    }
 
 }

@@ -123,5 +123,9 @@ Route::put('/pays/{id}/', 'PayController@calculate');
 Route::post('/pays/{idPay}/employees/{idEmployee}/otherDiscounts/', 'PayController@otherDiscounts');
 Route::post('/pays/{idPay}/employees/{idEmployee}/otherIncomes/', 'PayController@otherIncomes');
 //Attendence
+Route::get('/attendances/{idAtt}/employees/{code}/', 'AttendenceController@show');
+Route::get('/attendances/{idAtt}/employees/{code}/absences/', 'AttendenceController@showAbsences');
+Route::get('/attendances/', 'AttendenceController@list');
+Route::put('/attendances/{id}/modify', 'AttendenceController@update');
 Route::post('/attendances/', 'AttendenceController@generate');
 Route::put('/attendances/{id}/', 'AttendenceController@massUpdate');

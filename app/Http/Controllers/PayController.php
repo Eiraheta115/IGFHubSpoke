@@ -122,5 +122,4 @@ class PayController extends Controller
         return response()->json(['pay' => $jsonEmployees], 200);
       }
     }
-
 }
