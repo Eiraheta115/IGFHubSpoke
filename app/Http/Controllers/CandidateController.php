@@ -120,7 +120,7 @@ class CandidateController extends Controller
           'grade'=> (double)$evaluation->pivot->grade];
       }
       switch ($candidate->state) {
-        case 1:
+        case 0:
         $jsonCandidateSubscribed[]=[
         'id'=> $candidate->id,
         'state'=> $candidate->state,
@@ -128,7 +128,7 @@ class CandidateController extends Controller
         'Evaluation'=> $jsonCandidateEvaluations
       ];
           break;
-        case 2:
+        case $candidate->state=1 || $candidate->state=2:
         $jsonCandidateInProcess[]=[
         'id'=> $candidate->id,
         'state'=> $candidate->state,

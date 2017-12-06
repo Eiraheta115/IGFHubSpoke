@@ -92,7 +92,7 @@ Route::get('/evaluations/{id}/candidates/', 'CandidateController@byEvaluations')
 Route::get('/candidates/{id}/', 'CandidateController@show');
 Route::put('/candidates/{id}', 'CandidateController@update');
 Route::put('/candidates/{id}/state', 'CandidateController@updateState');
-Route::get('/candidates/classified/', 'CandidateController@listClassified');
+Route::get('/candidatesClass/', 'CandidateController@listClassified');
 Route::post('/candidates/{id}/hire', 'EmployeeController@hire');
 Route::get('/employees/{code}/', 'EmployeeController@show');
 //Evaluation
