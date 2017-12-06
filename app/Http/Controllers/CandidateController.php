@@ -94,6 +94,16 @@ class CandidateController extends Controller
     }
   }
 
+  public function updateForMassUpdate($id, $value){
+    $candidate=Candidate::find($id);
+    if (is_null($candidate)) {
+      return response()->json(['msj' => "Candidate not found"], 404);
+    }else{
+      $candidate->state=$value;
+      $candidate->save();
+    }
+  }
+
   public function updateState($id, Request $request){
     $data= $request->json()->all();
     $candidates=Candidate::find($id);

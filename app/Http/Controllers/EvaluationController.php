@@ -32,6 +32,7 @@ class EvaluationController extends Controller
       foreach ($ids as $id) {
         $candidate=Candidate::find($id);
         $evaluation->candidates()->attach($candidate->id);
+        app('App\Http\Controllers\CandidateController')->updateForMassUpdate($id,2);
       }
       return response()->json(['saved' => true], 201);
     }
