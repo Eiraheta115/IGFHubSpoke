@@ -32,10 +32,24 @@ class CandidateController extends Controller
   }
 
   public function list(){
-    $PermissionController='App\Http\Controllers\PermissionController';
-    $json=app($PermissionController)->validateCandidates();
-    $value=$json->getData()->value;
-    if ($value==true) {
+    // $PermissionController='App\Http\Controllers\PermissionController';
+    // $json=app($PermissionController)->validateCandidates();
+    // $value=$json->getData()->value;
+    // if ($value==true) {
+    //   $candidates=Candidate::where('hired', false)->get();
+    //   $jsonCandidate=array();
+    //   foreach ($candidates as $candidate) {
+    //     $jsonCandidate[]=[
+    //       'id'=> $candidate->id,
+    //       'state'=> $candidate->state,
+    //       'fullname'=> $candidate->people->fullname
+    //     ];
+    //   }
+    //   return response()->json($jsonCandidate, 200);
+    // }else {
+    //   return response()->json(['msj' => "You are not authorized to manage candidates"], 401);
+    // }
+
       $candidates=Candidate::where('hired', false)->get();
       $jsonCandidate=array();
       foreach ($candidates as $candidate) {
@@ -46,11 +60,7 @@ class CandidateController extends Controller
         ];
       }
       return response()->json($jsonCandidate, 200);
-    }else {
-      return response()->json(['msj' => "You are not authorized to manage candidates"], 401);
-    }
-
-  }
+}
 
   public function byEvaluations($id){
     $conv= (int)$id;

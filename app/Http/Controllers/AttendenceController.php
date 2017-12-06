@@ -182,28 +182,58 @@ class AttendenceController extends Controller
         }
     }
 
-    public function getHours($id){
-      $employee=Employee::find($id);
-      foreach ($employee->attendances as $attendance) {
-        $hours=0;
-        $hourIn=strtotime(substr($attendance->pivot->hourIn,11));
-        $hourOut=strtotime(substr($attendance->pivot->hourOut,11));
+    public function getHours($attId, $code){
+      $employeeQ=Employee::where('code', $code)->first();
+      $attendance=Attendence::find($attId);
+      $conditions=['attendance_id'=>$attId, 'code_employee'=>$code];
+      $attendances=AttEmployee::where($conditions)->get();
+      $hours=0;
+      foreach ($attendances as $att) {
+          $hourIn=strtotime("00:00:00");
+          $hourOut=strtotime("00:00:00");
+          $hourIn=strtotime(substr($att->hourIn,11));
+          $hourOut=strtotime(substr($att->hourOut,11));
+          if ($hourIn<strtotime("08:00:00")) {
+            $hourIn=strtotime("08:00:00");
+          }
+          if ($hourOut>strtotime("17:00:00")) {
+            $hourIn=strtotime("17:00:00");
+          }
+          if ($hourIn==strtotime("00:00:00") && $hourOut>strtotime("12:00:00")) {
+            $hour=strtotime("17:00:00")-$hourOut;
+          }
+          if ($hourOut==strtotime("00:00:00") && $hourIn>=strtotime("08:00:00")) {
+            $hour=strtotime("12:00:00")-$hourIn;
+          }
+          if ($hourIn!=strtotime("00:00:00") && $hourOut!=strtotime("00:00:00")) {
+            $hour=$hourOut-$hourIn-3600;
+            $hour=$hourOut-$hourIn;
+          }
+          if ($hourOut==strtotime("00:00:00") && $hourIn==strtotime("08:00:00")) {
+            $hourIn=strtotime("00:00:00");
+            $hourOut=strtotime("00:00:00");
+            $hour=$hourOut-$hourIn;
+          }
 
-        if ($hourIn<strtotime("08:00:00")) {
-          $hourIn=strtotime("08:00:00");
-        }
-        if ($hourOut>strtotime("17:00:00")) {
-          $hourIn=strtotime("17:00:00");
-        }
-        if ($hourIn==strtotime("00:00:00") && $hourOut>strtotime("12:00:00")) {
-          $hour=strtotime("12:00:00")-$hourOut;
-        }
-        if ($hourOut==strtotime("00:00:00") && $hourIn>strtotime("08:00:00")) {
-          $hour-$hourIn-strtotime("08:00:00");
-        }
-        $hours+=$hour;
+          $hours+=$hour;
+        $json[]=['id'=>$att->id,'hourIn'=>substr($att->hourIn,11), 'hourOut'=>substr($att->hourOut,11), 'hour'=>$hour, 'hours'=>$hours];
       }
       return response()->json(['hours' => round($hours/3600,2)], 200);
+    }
+
+    public function byPeriod($id)
+    {
+      $attendance=Attendence::find($id);
+      foreach ($attendance->employees as $employee) {
+        $hours=$this->getHours($attendance->id, $employee->code);
+        $data=$hours->getData()->hours;
+        $attEmployee[]=[
+          'code'=>$employee->code,
+          'name'=>$employee->people->fullname,
+          'hour'=>$data
+        ];
+      }
+      return response()->json(['employees' => $attEmployee], 200);
     }
 
 }

@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::middleware('jwt.auth')->group(function(){
-Route::get('/candidates/', 'CandidateController@list');
+//Route::get('/candidates/', 'CandidateController@list');
 });
 // Route::group(['middleware' => 'jwt.auth'],function(){
 //   Route::get('/candidates/', 'CandidateController@list');
@@ -87,7 +87,7 @@ Route::put('/jobs/{id}', 'JobController@update');
 Route::delete('/jobs/{id}', 'JobController@delete');
 //Candidate
 Route::post('candidates', 'CandidateController@create');
-//Route::get('/candidates/', 'CandidateController@list');
+Route::get('/candidates/', 'CandidateController@list');
 Route::get('/evaluations/{id}/candidates/', 'CandidateController@byEvaluations');
 Route::get('//candidates/{id}/', 'CandidateController@show');
 Route::put('/candidates/{id}', 'CandidateController@update');
@@ -125,6 +125,8 @@ Route::post('/pays/{idPay}/employees/{idEmployee}/otherIncomes/', 'PayController
 //Attendence
 Route::get('/attendances/{idAtt}/employees/{code}/', 'AttendenceController@show');
 Route::get('/attendances/{idAtt}/employees/{code}/absences/', 'AttendenceController@showAbsences');
+Route::get('/attendances/{idAtt}/employees/{code}/hours/', 'AttendenceController@getHours');
+Route::get('/attendances/{idAtt}/hours/', 'AttendenceController@byPeriod');
 Route::get('/attendances/', 'AttendenceController@list');
 Route::put('/attendances/{id}/modify', 'AttendenceController@update');
 Route::post('/attendances/', 'AttendenceController@generate');
