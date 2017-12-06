@@ -12,7 +12,7 @@ class CandidateController extends Controller
     $data= $request->json()->all();
     $candidate = new Candidate;
     $people = new People;
-    $candidate->state=$data['state'];
+    $candidate->state=0;
     $candidate->hired=false;
     $candidate->observation=$data['observation'];
     $candidate->save();
@@ -112,16 +112,13 @@ class CandidateController extends Controller
     $jsonCandidateFinalist=array();
     $jsonCandidateDiscarded=array();
 
-
     $candidates=Candidate::where('hired', false)->get();
-
       foreach ($candidates as $candidate) {
         $jsonCandidateEvaluations=array();
       foreach ($candidate->evaluations as $evaluation) {
           $jsonCandidateEvaluations[]=['name'=>$evaluation->name,
           'grade'=> (double)$evaluation->pivot->grade];
       }
-
       switch ($candidate->state) {
         case 1:
         $jsonCandidateSubscribed[]=[
@@ -131,7 +128,6 @@ class CandidateController extends Controller
         'Evaluation'=> $jsonCandidateEvaluations
       ];
           break;
-
         case 2:
         $jsonCandidateInProcess[]=[
         'id'=> $candidate->id,
@@ -140,7 +136,6 @@ class CandidateController extends Controller
         'Evaluation'=> $jsonCandidateEvaluations
       ];
           break;
-
         case 3:
         $jsonCandidateFinalist[]=[
         'id'=> $candidate->id,
@@ -149,7 +144,6 @@ class CandidateController extends Controller
         'Evaluation'=> $jsonCandidateEvaluations
       ];
           break;
-
         case 4:
         $jsonCandidateDiscarded[]=[
         'id'=> $candidate->id,
@@ -158,13 +152,8 @@ class CandidateController extends Controller
         'Evaluation'=> $jsonCandidateEvaluations
       ];
           break;
-
-        default:
-
-          break;
       }
       unset($jsonCandidateEvaluations);
-
     }
     $jsonCandidates[]=[
       'Subscribed'=> $jsonCandidateSubscribed,

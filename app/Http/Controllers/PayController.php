@@ -41,13 +41,25 @@ class PayController extends Controller
         foreach ($pay->employees as $employee) {
           $valloan=0;
           $total=$employee->pivot->total;
+          $hours=app('App\Http\Controllers\AttendenceController')->getHours($data['attendance_id'],$employee->code);
+          $hoursWorked=$hours->getData()->hours;
+          switch ($employee->salarytype_id) {
+            case 1:
+              $totHour=176;
+              break;
+
+            case 2:
+              $totHour=88;
+              break;
+          }
+          $nTotal=$total/$totHour;
           foreach ($employee->loans as $loan) {
             if ($loan->payed==false) {
                 $valloan= $valloan+$loan->fee;
                 app('App\Http\Controllers\LoanController')->discountLoan($loan->id);
               }
           }
-            $pay->employees()->updateExistingPivot($employee->id,['loans'=>$valloan,'total'=>$total-$valloan]);
+            $pay->employees()->updateExistingPivot($employee->id,['loans'=>$valloan,'total'=>$nTotal-$valloan,'days'=>(int)$hoursWorked]);
         }
         $pay->calculated=true;
         $pay->save();

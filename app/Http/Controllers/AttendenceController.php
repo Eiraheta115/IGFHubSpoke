@@ -233,7 +233,71 @@ class AttendenceController extends Controller
           'hour'=>$data
         ];
       }
-      return response()->json(['employees' => $attEmployee], 200);
+      return response()->json(['employees' =>array_values( array_unique( $attEmployee, SORT_REGULAR ) ) ], 200);
+    }
+
+    public function generateDates(Request $request){
+      $data= $request->json()->all();
+      $conditions=['active'=>true, 'salarytype_id'=>$data['salarytype_id']];
+      $employees=Employee::where($conditions)->get();
+
+      $workdays = array();
+      $type = CAL_GREGORIAN;
+      $m=$month = date($data['month']); // Month ID, 1 through to 12.
+      $y=$year = date($data['year']); // Year in 4 digit 2009 format.
+      $day_count = cal_days_in_month($type, $month, $year); // Get the amount of days
+
+      //loop through all days
+      for ($i = 1; $i <= $day_count; $i++) {
+
+        $date = $year.'/'.$month.'/'.'0'.$i; //format date
+        $get_name = date('l', strtotime($date)); //get week day
+          $day_name = substr($get_name, 0, 3); // Trim day name to 3 chars
+
+        //if not a weekend add day to array
+        if($day_name != 'Sun' && $day_name != 'Sat'){
+            $workdays[] = date($y."-".$m."-".$i);
+        }
+
+      }
+      if ($data['salarytype_id']==2) {
+        $limit=array_search($year . "-" . $month . "-15", $workdays);
+        switch ($data['divison']) {
+          case 1:
+            $init=0;
+            break;
+          case 2:
+            $init=$limit+1;
+            $limit=count($workdays);
+            break;
+        }
+      }else{
+        $init=0;
+        $limit=count($workdays);
+      }
+
+      for ($j=$init; $j <$limit ; $j++) {
+        foreach ($employees as $key => $employee) {
+          $json[]=[
+            'x1'=>1,
+            'x2'=>0,
+            'x3'=>0,
+            'code'=>$employee->code,
+            'x4'=>0,
+            'fecha'=>$workdays[$j] ." " . $data['hour'],
+            'x5'=>0,
+            'x6'=>0,
+            'x7'=>0,
+            'x8'=>0,
+            'x9'=>0,
+            'x10'=>0,
+            'x11'=>0,
+            'x12'=>0,
+            'x13'=>0,
+          ];
+        }
+      }
+      return response()->json(['json' => $json], 200);
     }
 
 }
