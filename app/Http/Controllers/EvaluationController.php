@@ -64,6 +64,7 @@ class EvaluationController extends Controller
       return response()->json(['msj' => "Candidate not found"], 404);
     }else{
       $evaluation->candidates()->updateExistingPivot($candidate->id, ['grade'=>$data['grade']]);
+      app('App\Http\Controllers\CandidateController')->updateForMassUpdate($idCandidate,1);
       return response()->json(['saved' => true], 201);
       }
     }
