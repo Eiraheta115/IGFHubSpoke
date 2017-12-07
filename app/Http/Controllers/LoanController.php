@@ -26,21 +26,22 @@ class LoanController extends Controller
       $diff = abs(strtotime($date2) - strtotime($date1))/(60*60*24);
       switch ($employee->salaryTypes->name) {
         case 'mensual':
-          $loan->fee=$data['value']/($diff/30);
+          $fee=$data['value']/($diff/30);
           break;
         case 'quincenal':
-          $loan->fee=$data['value']/($diff/(30/2));
+          $fee=$data['value']/($diff/(30/2));
           break;
         case 'semanal':
-          $loan->fee=$data['value']/($diff/(30/4));
+          $fee=$data['value']/($diff/(30/4));
           break;
         case 'diario':
-          $loan->fee=$data['value']/($diff);
+          $fee=$data['value']/($diff);
           break;
        }
+       $loan->fee=$fee;
       $loan->payed=false;
       $loan->save();
-      return response()->json(['saved' => true], 201);
+      return response()->json(['saved' => true,'OriginDate'=>$date1, 'DeadLine'=>$date2, 'fee'=>round($fee,2)], 201);
     }
   }
 
